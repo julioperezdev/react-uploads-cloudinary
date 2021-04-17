@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form"
 const Form =()=>{
 
     const [serverStatusResponse, setServerStatusResponse] = useState(null)
+    const [serverUsernameResponse, setServerUsernameResponse] = useState(null)
     const {register, handleSubmit} = useForm()
 
     const onSubmitUserForm = async(data) =>{
@@ -19,6 +20,7 @@ const Form =()=>{
 
         if(sendProfile.data.userCreated.username === data.username){
             setServerStatusResponse(sendProfile.status)
+            setServerUsernameResponse(sendProfile.data.userCreated.username)
         }else{
             setServerStatusResponse(null)
         }
@@ -34,11 +36,12 @@ const Form =()=>{
         }
         console.log(body)
 
-        // const formData = new FormData();
-        // formData.append('image', data.image[0])
+        const formData = new FormData();
+        formData.append('image', data.image[0])
         
         // const info = {
-            
+        //       formData,
+        //       username:  serverUsernameResponse, 
         // }
         
         // const information = {
@@ -50,19 +53,20 @@ const Form =()=>{
         //     }
         // }
         
-        // const config  = {
-        //     headers:{
-        //         'content-type': 'multipart/form-data'
-        //     },
+        const config  = {
+            headers:{
+                'content-type': 'multipart/form-data'
+            },
             
-        // }
+        }
 
         
-        // console.log(data)
-        // console.log(information)
-        
-        // const sendProfile = await axios.post("http://localhost:3002/profile/photos/show", formData, config)
-        // console.log(sendProfile)
+        console.log(data)
+        //console.log(info)
+        const URL = `http://localhost:3002/profile/photos/upload-image/${serverUsernameResponse}`
+        console.log(URL)
+        const sendProfile = await axios.post(URL, formData, config)
+        console.log(sendProfile)
     } 
 
 
